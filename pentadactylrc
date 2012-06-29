@@ -1,0 +1,58 @@
+"高亮所有的匹配关键字
+set hlfind
+
+"在这些站点禁用pentadactyl
+set passkeys=www\.google\.com/reader/:jkovA
+
+"定义复制粘贴
+map -m n,v,i,c,t <C-a> <Pass>
+map -m n,v,i,c,t <C-c> <Pass>
+map -m i,c,t <C-v> <Pass>
+map -m i,c,t <C-x> <Pass>
+map -m i,c,t <C-z> <Pass>
+
+"浏览设置
+noremap j 5j
+noremap k 5k
+noremap l 5l
+noremap h 5h
+
+"切换标签
+noremap h gT
+noremap l gt
+
+"后退l前进
+map H :back<CR>
+map L :forward<CR>
+
+"重定义t和o：
+"如果有文字链接被选中，则直接打开链接；如果被选中的是一般文字，则用默认搜索引擎搜索；
+"jj否则打开:tabopen或者:open命令行，手动输入关键字搜索。
+:map t -js content.getSelection().toString()!=""?dactyl.execute(":tabopen "+ content.getSelection()):CommandExMode().open("tabopen ")
+:map o -js content.getSelection().toString()!=""?dactyl.execute(":open "+ content.getSelection()):CommandExMode().open("open ")
+
+"映射键s：在某个搜索引擎结果页面按s键，会弹出引擎列表，选中引擎直接更换引擎用当前搜索的内容重新搜索。
+:com! -nargs=? -complete=search switchenginesearch exe 'o <args> ' + (buffer.lastInputField?buffer.lastInputField.value:'')
+:map s gi<ESC> :switchenginesearch<Space>
+
+"站内搜索
+/*{{{*/
+"sitesearchGoogle
+:com! -nargs=* sitesearch exe "t http://www.google.com/search?q=" + encodeURIComponent("<args>") + "&sitesearch=" + window.content.location.hostname
+
+"sitesearchBaidu
+:com! -nargs=* sitesearch exe "t http://www.baidu.com/s?ie=utf-8&word=" + encodeURIComponent("<args> site:" + window.content.location.hostname);
+/*}}}*/
+
+"插件
+
+"urlFieldTweak
+	"[+-❤⋯]
+	"+代表当前页面有后退历史，可以用H键后退
+	"-代表当前页面有前进历史，可以用L键前进
+	"❤代表当前页面已经存为书签
+
+"walk-input在input中进行切换/在一个文本框内部通过<M-i>或<A-i>直接跳转到下一个文本框内部
+"_smooziee平滑滚动
+
+
